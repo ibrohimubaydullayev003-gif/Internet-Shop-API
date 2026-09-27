@@ -1,0 +1,255 @@
+{
+  "info": {
+    "name": "Internet Magazin API",
+    "description": "DRF Internet Magazin API uchun barcha asosiy endpointlar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "base_url", "value": "http://127.0.0.1:8000/api"},
+    {"key": "token", "value": ""},
+    {"key": "product_id", "value": "1"},
+    {"key": "category_id", "value": "1"},
+    {"key": "order_id", "value": "1"}
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"phone\": \"+998901234567\",\n  \"password\": \"12345678\"\n}"
+            },
+            "url": "{{base_url}}/auth/register/"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"12345678\"\n}"
+            },
+            "url": "{{base_url}}/auth/login/"
+          }
+        },
+        {
+          "name": "Profile",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Token {{token}}"}],
+            "url": "{{base_url}}/auth/profile/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catalog",
+      "item": [
+        {
+          "name": "Categories GET",
+          "request": {"method": "GET", "url": "{{base_url}}/categories/"}
+        },
+        {
+          "name": "Category CREATE (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"name\": \"Elektronika\",\n  \"slug\": \"elektronika\",\n  \"parent\": null\n}"},
+            "url": "{{base_url}}/categories/"
+          }
+        },
+        {
+          "name": "Category Detail",
+          "request": {"method": "GET", "url": "{{base_url}}/categories/{{category_id}}/"}
+        },
+        {
+          "name": "Category UPDATE (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"name\": \"Yangi kategoriya nomi\"\n}"},
+            "url": "{{base_url}}/categories/{{category_id}}/"
+          }
+        },
+        {
+          "name": "Category DELETE (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Token {{token}}"}],
+            "url": "{{base_url}}/categories/{{category_id}}/"
+          }
+        },
+        {
+          "name": "Products GET + Filter + Search + Ordering",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/products/?category=elektronika&min_price=100&max_price=500&search=telefon&ordering=-price&page=1"
+          }
+        },
+        {
+          "name": "Product Detail",
+          "request": {"method": "GET", "url": "{{base_url}}/products/{{product_id}}/"}
+        },
+        {
+          "name": "Product CREATE (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"category\": 1,\n  \"name\": \"Telefon\",\n  \"slug\": \"telefon\",\n  \"description\": \"Yangi telefon\",\n  \"price\": \"350.00\",\n  \"stock\": 10\n}"},
+            "url": "{{base_url}}/products/"
+          }
+        },
+        {
+          "name": "Product UPDATE (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"price\": \"400.00\",\n  \"stock\": 15\n}"},
+            "url": "{{base_url}}/products/{{product_id}}/"
+          }
+        },
+        {
+          "name": "Product DELETE (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Token {{token}}"}],
+            "url": "{{base_url}}/products/{{product_id}}/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Interactions",
+      "item": [
+        {
+          "name": "Like Toggle",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Token {{token}}"}],
+            "url": "{{base_url}}/products/{{product_id}}/like/"
+          }
+        },
+        {
+          "name": "My Likes",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Token {{token}}"}],
+            "url": "{{base_url}}/likes/"
+          }
+        },
+        {
+          "name": "Product Comments GET",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/products/{{product_id}}/comments/"
+          }
+        },
+        {
+          "name": "Product Comment POST",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"text\": \"Juda yaxshi mahsulot\",\n  \"rating\": 5\n}"},
+            "url": "{{base_url}}/products/{{product_id}}/comments/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Token {{token}}"}],
+            "url": "{{base_url}}/cart/"
+          }
+        },
+        {
+          "name": "Add To Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"product_id\": 1,\n  \"quantity\": 2\n}"},
+            "url": "{{base_url}}/cart/add/"
+          }
+        },
+        {
+          "name": "Remove From Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"product_id\": 1\n}"},
+            "url": "{{base_url}}/cart/remove/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"shipping_address\": \"Toshkent shahri, Chilonzor tumani\"\n}"},
+            "url": "{{base_url}}/orders/checkout/"
+          }
+        },
+        {
+          "name": "My Orders",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Token {{token}}"}],
+            "url": "{{base_url}}/orders/"
+          }
+        },
+        {
+          "name": "Admin Change Order Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Token {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"status\": \"shipping\"\n}"},
+            "url": "{{base_url}}/admin/orders/{{order_id}}/status/"
+          }
+        }
+      ]
+    }
+  ]
+}
