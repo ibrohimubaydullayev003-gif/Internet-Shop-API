@@ -1,12 +1,14 @@
 from django.urls import path
 
-from .views import AdminOrderStatusView, CartAddView, CartRemoveView, CartView, CategoryDetailView, CategoryListCreateView, CheckoutView, LikeListView, LoginView, OrderListView, ProductCommentsView, ProductDetailView, ProductLikeView, ProductListCreateView, ProfileView, RegisterView
+from .views import AdminOrderStatusView, CartAddView, CartRemoveView, CartView, CategoryDetailView, CategoryListCreateView, CheckoutView, LikeListView, LoginView, OrderListView, ProductCommentsView, ProductDetailView, ProductLikeView, ProductListCreateView, ProfileView, RegisterView, ChangePasswordView, LogoutView
 
 
 urlpatterns = [
     path('auth/register/', RegisterView.as_view(), name='register'),
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/profile/', ProfileView.as_view(), name='profile'),
+    path('auth/change-password/',    ChangePasswordView.as_view(),   name='change-password'),
+    path('auth/logout/', LogoutView.as_view(), name='logout'),
 
     path('categories/', CategoryListCreateView.as_view(), name='category-list-create'),
     path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),

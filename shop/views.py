@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Cart, CartItem, Category, Comment, Like, Order, OrderItem, Product
-from .serializers import CartAddSerializer, CartRemoveSerializer, CartSerializer, CategorySerializer, CheckoutSerializer, CommentSerializer, LikeSerializer, LoginSerializer, OrderSerializer, OrderStatusSerializer, ProductSerializer, RegisterSerializer, UserSerializer
+from .serializers import CartAddSerializer, CartRemoveSerializer, CartSerializer, CategorySerializer, CheckoutSerializer, CommentSerializer, LikeSerializer, LoginSerializer, OrderSerializer, OrderStatusSerializer, ProductSerializer, RegisterSerializer, UserSerializer, ChangePasswordSerializer
 
 
 
@@ -67,12 +67,58 @@ class LoginView(generics.GenericAPIView):
         )
 
 
-class ProfileView(generics.RetrieveAPIView):
+class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user
+
+
+class ChangePasswordView(generics.GenericAPIView):
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        old_password = serializer.validated_data['old_password']
+        new_password = serializer.validated_data['new_password']
+
+        user = request.user
+
+        if not user.check_password(old_password):
+            return Response(
+                {
+                    'detail': "Eski password noto'g'ri."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response(
+            {
+                'message':
+                    "Password muvaffaqiyatli o'zgartirildi."
+            }
+        )
+
+class LogoutView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        Token.objects.filter(
+            user=request.user
+        ).delete()
+
+        return Response(
+            {
+                'message': "Logout muvaffaqiyatli bajarildi."
+            }
+        )
 
 
 class CategoryListCreateView(generics.ListCreateAPIView):
