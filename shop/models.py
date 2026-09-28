@@ -67,9 +67,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['cart', 'product'], name='unique_cart_product'),
-        ]
+        constraints = [models.UniqueConstraint(fields=['cart', 'product'], name='unique_cart_product'),]
 
     def __str__(self):
         return f'{self.product.name} x {self.quantity}'
@@ -100,8 +98,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='order_items',
-    )
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='order_items',)
     quantity = models.PositiveIntegerField()
     price_at_that_time = models.DecimalField(max_digits=12, decimal_places=2)
 
@@ -115,9 +112,7 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['user', 'product'], name='unique_user_product_like'),
-        ]
+        constraints = [models.UniqueConstraint(fields=['user', 'product'], name='unique_user_product_like'),]
 
     def __str__(self):
         return f'{self.user.email} -> {self.product.name}'

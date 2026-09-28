@@ -7,12 +7,8 @@ from .models import Cart, CartItem, Category, Comment, Like, Order, OrderItem, P
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'phone', 'role', 'is_staff')
-    fieldsets = BaseUserAdmin.fieldsets + (
-        ('Qo\'shimcha', {'fields': ('phone', 'role')}),
-    )
-    add_fieldsets = BaseUserAdmin.add_fieldsets + (
-        ('Qo\'shimcha', {'fields': ('email', 'phone', 'role')}),
-    )
+    fieldsets = BaseUserAdmin.fieldsets + (('Qo\'shimcha', {'fields': ('phone', 'role')}),)
+    add_fieldsets = BaseUserAdmin.add_fieldsets + (('Qo\'shimcha', {'fields': ('email', 'phone', 'role')}),)
     search_fields = ('username', 'email', 'phone')
 
 
